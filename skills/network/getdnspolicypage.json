@@ -1,0 +1,349 @@
+{
+  "description": "Retrieve a paginated list of all DNS policies on a site.",
+  "method": "GET",
+  "name": "unifi_network_list_dns_policies",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "offset",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/dns/policies",
+  "responseSample": "{\n  \"offset\": 0,\n  \"limit\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"data\": [\n    {\n      \"type\": \"string\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"enabled\": true,\n      \"metadata\": {\n        \"origin\": \"string\"\n      },\n      \"domain\": \"string\"\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "limit",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "count",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "totalCount",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "A_RECORD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "AAAA_RECORD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "CNAME_RECORD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "MX_RECORD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "TXT_RECORD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SRV_RECORD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "FORWARD_DOMAIN"
+                }
+              ],
+              "name": "type",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "id",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "enabled",
+              "required": true,
+              "type": "boolean"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "SYSTEM_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "DERIVED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "SYSTEM_DEFINED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "DERIVED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "SYSTEM_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "DERIVED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "DERIVED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "metadata",
+              "required": true,
+              "type": "object (User defined entity metadata)"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "domain",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "ipv4Address",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": "Time to live in seconds.",
+              "discriminator": null,
+              "name": "ttlSeconds",
+              "required": false,
+              "type": "integer"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "data",
+          "required": true,
+          "type": "Array of object (DNS policy)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getdnspolicypage.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getdnspolicypage"
+  },
+  "title": "List DNS Policies"
+}

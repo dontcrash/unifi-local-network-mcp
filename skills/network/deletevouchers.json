@@ -1,0 +1,54 @@
+{
+  "description": "Remove Hotspot vouchers based on the specified filter criteria.",
+  "method": "DELETE",
+  "name": "unifi_network_delete_vouchers",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": true,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/hotspot/vouchers",
+  "responseSample": "{\n  \"vouchersDeleted\": 0\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "vouchersDeleted",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "deletevouchers.json",
+    "url": "https://developer.ui.com/network/v10.3.58/deletevouchers"
+  },
+  "title": "Delete Vouchers"
+}

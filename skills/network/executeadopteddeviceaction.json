@@ -1,0 +1,59 @@
+{
+  "description": "Perform an action on an specific adopted device. The request body must include the action name and any applicable input arguments.",
+  "method": "POST",
+  "name": "unifi_network_execute_adopted_device_action",
+  "namespace": "network",
+  "parameters": {
+    "body": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": [
+          {
+            "schema": [],
+            "selected": true,
+            "value": "RESTART"
+          }
+        ],
+        "name": "action",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "deviceId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/devices/{deviceId}/actions",
+  "responseSample": null,
+  "responses": [
+    {
+      "fields": [],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "executeadopteddeviceaction.json",
+    "url": "https://developer.ui.com/network/v10.3.58/executeadopteddeviceaction"
+  },
+  "title": "Execute Adopted Device Action"
+}

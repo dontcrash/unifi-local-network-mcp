@@ -1,0 +1,264 @@
+{
+  "description": "Retrieve LAG details.",
+  "method": "GET",
+  "name": "unifi_network_get_lag_details",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "lagId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/switching/lags/{lagId}",
+  "responseSample": "{\n  \"type\": \"string\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"members\": [\n    {\n      \"deviceId\": \"00000000-0000-0000-0000-000000000000\",\n      \"portIdxs\": [\n        0\n      ]\n    }\n  ],\n  \"metadata\": {\n    \"origin\": \"string\"\n  }\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": [
+            {
+              "schema": null,
+              "selected": true,
+              "value": "LOCAL"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "SWITCH_STACK"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "MULTI_CHASSIS"
+            }
+          ],
+          "name": "type",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "deviceId",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "portIdxs",
+              "required": true,
+              "type": "Array of integer"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "members",
+          "required": true,
+          "type": "Array of object (IntegrationLagMemberDto)"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "metadata",
+          "required": true,
+          "type": "object (User defined entity metadata)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getlag.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getlag"
+  },
+  "title": "Get LAG Details"
+}

@@ -1,0 +1,44 @@
+{
+  "description": "Delete an exist traffic matching list on a site.",
+  "method": "DELETE",
+  "name": "unifi_network_delete_traffic_matching_list",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "trafficMatchingListId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/traffic-matching-lists/{trafficMatchingListId}",
+  "responseSample": null,
+  "responses": [
+    {
+      "fields": [],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "deletetrafficmatchinglist.json",
+    "url": "https://developer.ui.com/network/v10.3.58/deletetrafficmatchinglist"
+  },
+  "title": "Delete Traffic Matching List"
+}

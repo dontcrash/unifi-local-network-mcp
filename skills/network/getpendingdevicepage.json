@@ -1,0 +1,166 @@
+{
+  "description": "Retrieve a paginated list of devices pending adoption, including basic device information.",
+  "method": "GET",
+  "name": "unifi_network_list_devices_pending_adoption",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "offset",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/pending-devices",
+  "responseSample": "{\n  \"offset\": 0,\n  \"limit\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"data\": [\n    {\n      \"macAddress\": \"string\",\n      \"ipAddress\": \"string\",\n      \"model\": \"string\",\n      \"state\": \"ONLINE\",\n      \"supported\": true,\n      \"firmwareVersion\": \"string\",\n      \"firmwareUpdatable\": true,\n      \"features\": [\n        \"switching\"\n      ],\n      \"adoptionTargetSiteIds\": [\n        \"00000000-0000-0000-0000-000000000000\"\n      ]\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "limit",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "count",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "totalCount",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "macAddress",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "ipAddress",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "model",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "state",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "supported",
+              "required": true,
+              "type": "boolean"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "firmwareVersion",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "firmwareUpdatable",
+              "required": true,
+              "type": "boolean"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "features",
+              "required": true,
+              "type": "Array of string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "adoptionTargetSiteIds",
+              "required": true,
+              "type": "Array of string"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "data",
+          "required": true,
+          "type": "Array of object (Device pending adoption)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getpendingdevicepage.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getpendingdevicepage"
+  },
+  "title": "List Devices Pending Adoption"
+}

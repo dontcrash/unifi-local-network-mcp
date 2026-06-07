@@ -1,0 +1,79 @@
+{
+  "description": "Retrieve user-defined firewall policy ordering for a specific source/destination zone pair.",
+  "method": "GET",
+  "name": "unifi_network_get_user_defined_firewall_policy_ordering",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "sourceFirewallZoneId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "destinationFirewallZoneId",
+        "required": true,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/firewall/policies/ordering",
+  "responseSample": "{\n  \"orderedFirewallPolicyIds\": {\n    \"beforeSystemDefined\": [\n      \"00000000-0000-0000-0000-000000000000\"\n    ],\n    \"afterSystemDefined\": [\n      \"00000000-0000-0000-0000-000000000000\"\n    ]\n  }\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "beforeSystemDefined",
+              "required": true,
+              "type": "Array of string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "afterSystemDefined",
+              "required": true,
+              "type": "Array of string"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "orderedFirewallPolicyIds",
+          "required": true,
+          "type": "object"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getfirewallpolicyordering.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getfirewallpolicyordering"
+  },
+  "title": "Get User-Defined Firewall Policy Ordering"
+}

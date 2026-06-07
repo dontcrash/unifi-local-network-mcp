@@ -1,0 +1,44 @@
+{
+  "description": "Delete an existing firewall policy on a site.",
+  "method": "DELETE",
+  "name": "unifi_network_delete_firewall_policy",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "firewallPolicyId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/firewall/policies/{firewallPolicyId}",
+  "responseSample": null,
+  "responses": [
+    {
+      "fields": [],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "deletefirewallpolicy.json",
+    "url": "https://developer.ui.com/network/v10.3.58/deletefirewallpolicy"
+  },
+  "title": "Delete Firewall Policy"
+}

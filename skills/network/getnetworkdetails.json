@@ -1,0 +1,159 @@
+{
+  "description": "Retrieve detailed information about a specific network.",
+  "method": "GET",
+  "name": "unifi_network_get_network_details",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "networkId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/networks/{networkId}",
+  "responseSample": "{\n  \"management\": \"string\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"name\": \"string\",\n  \"enabled\": true,\n  \"vlanId\": 0,\n  \"metadata\": {\n    \"origin\": \"string\"\n  },\n  \"dhcpGuarding\": {\n    \"trustedDhcpServerIpAddresses\": [\n      \"string\"\n    ]\n  },\n  \"default\": true\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": [
+            {
+              "schema": null,
+              "selected": true,
+              "value": "UNMANAGED"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "GATEWAY"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "SWITCH"
+            }
+          ],
+          "name": "management",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "enabled",
+          "required": true,
+          "type": "boolean"
+        },
+        {
+          "children": [],
+          "description": "VLAN ID. Must be 1 for the default network and >= 2 for additional networks.",
+          "discriminator": null,
+          "name": "vlanId",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "description": "Orchestrated or System-defined configurable network support",
+          "discriminator": null,
+          "name": "metadata",
+          "required": true,
+          "type": "object (User or system defined or orchestrated entity metadata)"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": "List of trusted DHCP server IP addresses.",
+              "discriminator": null,
+              "name": "trustedDhcpServerIpAddresses",
+              "required": true,
+              "type": "Array of string"
+            }
+          ],
+          "description": "DHCP Guarding settings for this Network. If this field is omitted or null, the feature is disabled",
+          "discriminator": null,
+          "name": "dhcpGuarding",
+          "required": false,
+          "type": "object"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "default",
+          "required": true,
+          "type": "boolean"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getnetworkdetails.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getnetworkdetails"
+  },
+  "title": "Get Network Details"
+}

@@ -1,0 +1,155 @@
+{
+  "description": "Returns all device tags defined within a site, which can be used for WiFi Broadcast assignments.",
+  "method": "GET",
+  "name": "unifi_network_list_device_tags",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "offset",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/device-tags",
+  "responseSample": "{\n  \"offset\": 0,\n  \"limit\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"data\": [\n    {\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"name\": \"string\",\n      \"deviceIds\": [\n        \"00000000-0000-0000-0000-000000000000\"\n      ],\n      \"metadata\": {\n        \"origin\": \"string\"\n      }\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "limit",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "count",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "totalCount",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "id",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "name",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "deviceIds",
+              "required": true,
+              "type": "Array of string"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "metadata",
+              "required": true,
+              "type": "object (User or orchestrated entity metadata)"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "data",
+          "required": true,
+          "type": "Array of object (Device tag)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getdevicetagpage.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getdevicetagpage"
+  },
+  "title": "List Device Tags"
+}

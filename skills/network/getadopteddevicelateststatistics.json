@@ -1,0 +1,168 @@
+{
+  "description": "Retrieve the latest real-time statistics of a specific adopted device, such as uptime, data transmission rates, CPU and memory utilization.",
+  "method": "GET",
+  "name": "unifi_network_get_latest_adopted_device_statistics",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "deviceId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/devices/{deviceId}/statistics/latest",
+  "responseSample": "{\n  \"uptimeSec\": 0,\n  \"lastHeartbeatAt\": \"2024-01-01T00:00:00Z\",\n  \"nextHeartbeatAt\": \"2024-01-01T00:00:00Z\",\n  \"loadAverage1Min\": 0,\n  \"loadAverage5Min\": 0,\n  \"loadAverage15Min\": 0,\n  \"cpuUtilizationPct\": 0,\n  \"memoryUtilizationPct\": 0,\n  \"uplink\": {\n    \"txRateBps\": 0,\n    \"rxRateBps\": 0\n  },\n  \"interfaces\": {\n    \"radios\": [\n      {\n        \"frequencyGHz\": 0,\n        \"txRetriesPct\": 0\n      }\n    ]\n  }\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "uptimeSec",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "lastHeartbeatAt",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "nextHeartbeatAt",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "loadAverage1Min",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "loadAverage5Min",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "loadAverage15Min",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "cpuUtilizationPct",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "memoryUtilizationPct",
+          "required": false,
+          "type": "number"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "txRateBps",
+              "required": false,
+              "type": "integer"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "rxRateBps",
+              "required": false,
+              "type": "integer"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "uplink",
+          "required": false,
+          "type": "object"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "frequencyGHz",
+                  "required": true,
+                  "type": "number"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "txRetriesPct",
+                  "required": false,
+                  "type": "number"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "radios",
+              "required": false,
+              "type": "Array of object (Latest statistics for wireless radio)"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "interfaces",
+          "required": true,
+          "type": "object"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getadopteddevicelateststatistics.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getadopteddevicelateststatistics"
+  },
+  "title": "Get Latest Adopted Device Statistics"
+}

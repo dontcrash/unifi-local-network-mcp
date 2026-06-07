@@ -1,0 +1,45 @@
+{
+  "description": "Retrieve user-defined ACL rule ordering on a site.",
+  "method": "GET",
+  "name": "unifi_network_get_user_defined_acl_rule_ordering",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/acl-rules/ordering",
+  "responseSample": "{\n  \"orderedAclRuleIds\": [\n    \"00000000-0000-0000-0000-000000000000\"\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "orderedAclRuleIds",
+          "required": true,
+          "type": "Array of string"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getaclruleordering.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getaclruleordering"
+  },
+  "title": "Get User-Defined ACL Rule Ordering"
+}

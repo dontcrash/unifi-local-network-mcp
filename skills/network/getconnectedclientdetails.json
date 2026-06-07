@@ -1,0 +1,150 @@
+{
+  "description": "Retrieve detailed information about a specific connected client, including name, IP address, MAC address, connection type and access information.",
+  "method": "GET",
+  "name": "unifi_network_get_connected_client_details",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "clientId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/clients/{clientId}",
+  "responseSample": "{\n  \"type\": \"string\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"name\": \"string\",\n  \"connectedAt\": \"2024-01-01T00:00:00Z\",\n  \"ipAddress\": \"string\",\n  \"access\": null\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": [
+            {
+              "schema": null,
+              "selected": true,
+              "value": "WIRED"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "WIRELESS"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "VPN"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "TELEPORT"
+            }
+          ],
+          "name": "type",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "connectedAt",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "ipAddress",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "DEFAULT"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "GUEST"
+                }
+              ],
+              "name": "type",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "description": "Represents the type of network access and/or any applicable authorization status the client is using. - **Wired clients** may have direct access without additional authorization. - **Wireless clients** can be connected via a protected network or an open network that may require additional authorization (e.g., a guest portal). - **VPN clients** may have different authorization mechanisms. Currently, the only two supported access types are `GUEST` (used for wired and wireless guest clients) and `DEFAULT` (a placeholder, which might be refined in the future releases, used for all other clients). Filtering is possible by `access.type`, for example `access.type.eq('GUEST')` to list guest clients.",
+          "discriminator": null,
+          "name": "access",
+          "required": true,
+          "type": "object (Local client access details)"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "macAddress",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "uplinkDeviceId",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getconnectedclientdetails.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getconnectedclientdetails"
+  },
+  "title": "Get Connected Client Details"
+}

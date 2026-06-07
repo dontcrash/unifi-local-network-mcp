@@ -1,0 +1,53 @@
+{
+  "description": "Delete an existing network on a site.",
+  "method": "DELETE",
+  "name": "unifi_network_delete_network",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "networkId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "force",
+        "required": false,
+        "type": "boolean"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/networks/{networkId}",
+  "responseSample": null,
+  "responses": [
+    {
+      "fields": [],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "deletenetwork.json",
+    "url": "https://developer.ui.com/network/v10.3.58/deletenetwork"
+  },
+  "title": "Delete Network"
+}

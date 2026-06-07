@@ -1,0 +1,105 @@
+{
+  "description": "Reorder user-defined firewall policies for a specific source/destination zone pair.",
+  "method": "PUT",
+  "name": "unifi_network_reorder_user_defined_firewall_policies",
+  "namespace": "network",
+  "parameters": {
+    "body": [
+      {
+        "children": [
+          {
+            "children": [],
+            "description": null,
+            "discriminator": null,
+            "name": "beforeSystemDefined",
+            "required": true,
+            "type": "Array of string"
+          },
+          {
+            "children": [],
+            "description": null,
+            "discriminator": null,
+            "name": "afterSystemDefined",
+            "required": true,
+            "type": "Array of string"
+          }
+        ],
+        "description": null,
+        "discriminator": null,
+        "name": "orderedFirewallPolicyIds",
+        "required": true,
+        "type": "object"
+      }
+    ],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "sourceFirewallZoneId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "destinationFirewallZoneId",
+        "required": true,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/firewall/policies/ordering",
+  "responseSample": "{\n  \"orderedFirewallPolicyIds\": {\n    \"beforeSystemDefined\": [\n      \"00000000-0000-0000-0000-000000000000\"\n    ],\n    \"afterSystemDefined\": [\n      \"00000000-0000-0000-0000-000000000000\"\n    ]\n  }\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "beforeSystemDefined",
+              "required": true,
+              "type": "Array of string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "afterSystemDefined",
+              "required": true,
+              "type": "Array of string"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "orderedFirewallPolicyIds",
+          "required": true,
+          "type": "object"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "updatefirewallpolicyordering.json",
+    "url": "https://developer.ui.com/network/v10.3.58/updatefirewallpolicyordering"
+  },
+  "title": "Reorder User-Defined Firewall Policies"
+}

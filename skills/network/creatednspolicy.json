@@ -1,0 +1,607 @@
+{
+  "description": "Create a new DNS policy on a site.",
+  "method": "POST",
+  "name": "unifi_network_create_dns_policy",
+  "namespace": "network",
+  "parameters": {
+    "body": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": [
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "ipv4Address",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Time to live in seconds.",
+                "discriminator": null,
+                "name": "ttlSeconds",
+                "required": false,
+                "type": "integer"
+              }
+            ],
+            "selected": true,
+            "value": "A_RECORD"
+          },
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "ipv6Address",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Time to live in seconds.",
+                "discriminator": null,
+                "name": "ttlSeconds",
+                "required": false,
+                "type": "integer"
+              }
+            ],
+            "selected": false,
+            "value": "AAAA_RECORD"
+          },
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "targetDomain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Time to live in seconds.",
+                "discriminator": null,
+                "name": "ttlSeconds",
+                "required": false,
+                "type": "integer"
+              }
+            ],
+            "selected": false,
+            "value": "CNAME_RECORD"
+          },
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "mailServerDomain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Priority. A lower number is preferred.",
+                "discriminator": null,
+                "name": "priority",
+                "required": false,
+                "type": "integer"
+              }
+            ],
+            "selected": false,
+            "value": "MX_RECORD"
+          },
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "The text value associated with this TXT DNS record. Text can contain up to four 255-character strings. Lines containing commas must be enclosed in double quotes (\").",
+                "discriminator": null,
+                "name": "text",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "selected": false,
+            "value": "TXT_RECORD"
+          },
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Domain of the server that is running the service.",
+                "discriminator": null,
+                "name": "serverDomain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Service associated with this SRV record.",
+                "discriminator": null,
+                "name": "service",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "Protocol used by the service.",
+                "discriminator": null,
+                "name": "protocol",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "port",
+                "required": false,
+                "type": "integer"
+              },
+              {
+                "children": [],
+                "description": "Priority. A lower number is preferred.",
+                "discriminator": null,
+                "name": "priority",
+                "required": false,
+                "type": "integer"
+              },
+              {
+                "children": [],
+                "description": "Weight. A relative value applicable for records with the same priority. A lower number is preferred.",
+                "discriminator": null,
+                "name": "weight",
+                "required": false,
+                "type": "integer"
+              }
+            ],
+            "selected": false,
+            "value": "SRV_RECORD"
+          },
+          {
+            "schema": [
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "enabled",
+                "required": true,
+                "type": "boolean"
+              },
+              {
+                "children": [],
+                "description": null,
+                "discriminator": null,
+                "name": "domain",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "children": [],
+                "description": "IP address of the DNS Server that the DNS query is forwarded to.",
+                "discriminator": null,
+                "name": "ipAddress",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "selected": false,
+            "value": "FORWARD_DOMAIN"
+          }
+        ],
+        "name": "type",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "enabled",
+        "required": true,
+        "type": "boolean"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "domain",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "ipv4Address",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": "Time to live in seconds.",
+        "discriminator": null,
+        "name": "ttlSeconds",
+        "required": false,
+        "type": "integer"
+      }
+    ],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/dns/policies",
+  "responseSample": "{\n  \"type\": \"string\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"enabled\": true,\n  \"metadata\": {\n    \"origin\": \"string\"\n  },\n  \"domain\": \"string\"\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": [
+            {
+              "schema": null,
+              "selected": true,
+              "value": "A_RECORD"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "AAAA_RECORD"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "CNAME_RECORD"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "MX_RECORD"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "TXT_RECORD"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "SRV_RECORD"
+            },
+            {
+              "schema": null,
+              "selected": false,
+              "value": "FORWARD_DOMAIN"
+            }
+          ],
+          "name": "type",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "enabled",
+          "required": true,
+          "type": "boolean"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SYSTEM_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "ORCHESTRATED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "USER_DEFINED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "DERIVED"
+                }
+              ],
+              "name": "origin",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "metadata",
+          "required": true,
+          "type": "object (User defined entity metadata)"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "domain",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "ipv4Address",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": "Time to live in seconds.",
+          "discriminator": null,
+          "name": "ttlSeconds",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "statuses": [
+        "201"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "creatednspolicy.json",
+    "url": "https://developer.ui.com/network/v10.3.58/creatednspolicy"
+  },
+  "title": "Create DNS Policy"
+}

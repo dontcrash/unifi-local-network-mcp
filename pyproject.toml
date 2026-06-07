@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling==1.28.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "unifi-network-mcp"
+version = "0.1.0"
+description = "MCP server for the UniFi Network Integration API"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = [
+  "httpx==0.28.1",
+  "mcp[cli]==1.27.2",
+  "uvicorn==0.49.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.0.3",
+  "pytest-asyncio==1.4.0",
+  "respx==0.23.1",
+  "ruff==0.15.16",
+]
+
+[project.scripts]
+unifi-network-mcp = "unifi_mcp.server:main"
+unifi-import-docs = "scripts.import_unifi_docs:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/unifi_mcp", "scripts"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

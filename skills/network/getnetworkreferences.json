@@ -1,0 +1,87 @@
+{
+  "description": "Retrieve references to a specific network.",
+  "method": "GET",
+  "name": "unifi_network_get_network_references",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "networkId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/networks/{networkId}/references",
+  "responseSample": "{\n  \"referenceResources\": [\n    {\n      \"resourceType\": \"CLIENT\",\n      \"referenceCount\": 0,\n      \"references\": [\n        {\n          \"referenceId\": \"00000000-0000-0000-0000-000000000000\"\n        }\n      ]\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "resourceType",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": "Number of references of this type",
+              "discriminator": null,
+              "name": "referenceCount",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "referenceId",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": "List of references, present only if resourceType has API model defined",
+              "discriminator": null,
+              "name": "references",
+              "required": false,
+              "type": "Array of object (Network reference detail)"
+            }
+          ],
+          "description": "List of network reference resources",
+          "discriminator": null,
+          "name": "referenceResources",
+          "required": true,
+          "type": "Array of object (Network reference resource)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getnetworkreferences.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getnetworkreferences"
+  },
+  "title": "Get Network References"
+}

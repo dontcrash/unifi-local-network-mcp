@@ -1,0 +1,67 @@
+{
+  "description": "Perform an action on a specific device port. The request body must include the action name and any applicable input arguments.",
+  "method": "POST",
+  "name": "unifi_network_execute_port_action",
+  "namespace": "network",
+  "parameters": {
+    "body": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": [
+          {
+            "schema": [],
+            "selected": true,
+            "value": "POWER_CYCLE"
+          }
+        ],
+        "name": "action",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "portIdx",
+        "required": true,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "deviceId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/devices/{deviceId}/interfaces/ports/{portIdx}/actions",
+  "responseSample": null,
+  "responses": [
+    {
+      "fields": [],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "executeportaction.json",
+    "url": "https://developer.ui.com/network/v10.3.58/executeportaction"
+  },
+  "title": "Execute Port Action"
+}

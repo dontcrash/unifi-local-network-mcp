@@ -1,0 +1,321 @@
+{
+  "description": "Retrieve a paginated list of all Wifi Broadcasts on a site.",
+  "method": "GET",
+  "name": "unifi_network_list_wifi_broadcasts",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "offset",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/wifi/broadcasts",
+  "responseSample": "{\n  \"offset\": 0,\n  \"limit\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"data\": [\n    {\n      \"type\": \"string\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"name\": \"string\",\n      \"enabled\": true,\n      \"metadata\": {\n        \"origin\": \"string\"\n      },\n      \"network\": {\n        \"type\": \"string\"\n      },\n      \"securityConfiguration\": {\n        \"type\": \"string\"\n      },\n      \"broadcastingDeviceFilter\": {\n        \"type\": \"string\"\n      }\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "limit",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "count",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "totalCount",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "STANDARD"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "IOT_OPTIMIZED"
+                }
+              ],
+              "name": "type",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "id",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "name",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "enabled",
+              "required": true,
+              "type": "boolean"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "DERIVED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "metadata",
+              "required": true,
+              "type": "object (User or derived or orchestrated entity metadata)"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "NATIVE"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "SPECIFIC"
+                    }
+                  ],
+                  "name": "type",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "network",
+              "required": false,
+              "type": "object (Wifi network reference)"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "OPEN"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "WPA2_PERSONAL"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "WPA3_PERSONAL"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "WPA2_WPA3_PERSONAL"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "WPA2_ENTERPRISE"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "WPA3_ENTERPRISE"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "WPA2_WPA3_ENTERPRISE"
+                    }
+                  ],
+                  "name": "type",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "securityConfiguration",
+              "required": true,
+              "type": "object (Wifi security configuration overview)"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "DEVICES"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "DEVICE_TAGS"
+                    }
+                  ],
+                  "name": "type",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": "List of Access Point capable device IDs to which the WiFi broadcast applies.",
+                  "discriminator": null,
+                  "name": "deviceIds",
+                  "required": false,
+                  "type": "Array of string"
+                }
+              ],
+              "description": "Defines the custom scope of devices that will broadcast this WiFi network. If null, the WiFi network will be broadcast by all Access Point capable devices.",
+              "discriminator": null,
+              "name": "broadcastingDeviceFilter",
+              "required": false,
+              "type": "object (Broadcasting device filter)"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "broadcastingFrequenciesGHz",
+              "required": false,
+              "type": "Array of number"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "type",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "hotspotConfiguration",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "data",
+          "required": true,
+          "type": "Array of object (Wifi broadcast overview)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getwifibroadcastpage.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getwifibroadcastpage"
+  },
+  "title": "List Wifi Broadcasts"
+}

@@ -1,0 +1,110 @@
+{
+  "description": "Returns ISO-standard country codes and names, used for region-based configuration or regulatory compliance.",
+  "method": "GET",
+  "name": "unifi_network_list_countries",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "offset",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/countries",
+  "responseSample": "{\n  \"offset\": 0,\n  \"limit\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"data\": [\n    {\n      \"code\": \"string\",\n      \"name\": \"string\"\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "limit",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "count",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "totalCount",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": "The country code in ISO 3166-1 alpha-2 format.",
+              "discriminator": null,
+              "name": "code",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": "The country name.",
+              "discriminator": null,
+              "name": "name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "data",
+          "required": true,
+          "type": "Array of object (Country Definition)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getcountries.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getcountries"
+  },
+  "title": "List Countries"
+}

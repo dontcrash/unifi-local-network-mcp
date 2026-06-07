@@ -1,0 +1,200 @@
+{
+  "description": "Retrieve a paginated list of all Networks on a site.",
+  "method": "GET",
+  "name": "unifi_network_list_networks",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "offset",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "filter",
+        "required": false,
+        "type": "string"
+      }
+    ]
+  },
+  "path": "/v1/sites/{siteId}/networks",
+  "responseSample": "{\n  \"offset\": 0,\n  \"limit\": 0,\n  \"count\": 0,\n  \"totalCount\": 0,\n  \"data\": [\n    {\n      \"management\": \"string\",\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"name\": \"string\",\n      \"enabled\": true,\n      \"vlanId\": 0,\n      \"metadata\": {\n        \"origin\": \"string\"\n      },\n      \"default\": true\n    }\n  ]\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "offset",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "limit",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "count",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "totalCount",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": [
+                {
+                  "schema": null,
+                  "selected": true,
+                  "value": "UNMANAGED"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "GATEWAY"
+                },
+                {
+                  "schema": null,
+                  "selected": false,
+                  "value": "SWITCH"
+                }
+              ],
+              "name": "management",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "id",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "name",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "enabled",
+              "required": true,
+              "type": "boolean"
+            },
+            {
+              "children": [],
+              "description": "VLAN ID. Must be 1 for the default network and >= 2 for additional networks.",
+              "discriminator": null,
+              "name": "vlanId",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": [
+                    {
+                      "schema": null,
+                      "selected": true,
+                      "value": "USER_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "SYSTEM_DEFINED"
+                    },
+                    {
+                      "schema": null,
+                      "selected": false,
+                      "value": "ORCHESTRATED"
+                    }
+                  ],
+                  "name": "origin",
+                  "required": true,
+                  "type": "string"
+                }
+              ],
+              "description": "Orchestrated or System-defined configurable network support",
+              "discriminator": null,
+              "name": "metadata",
+              "required": true,
+              "type": "object (User or system defined or orchestrated entity metadata)"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "default",
+              "required": true,
+              "type": "boolean"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "data",
+          "required": true,
+          "type": "Array of object (Network overview)"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getnetworksoverviewpage.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getnetworksoverviewpage"
+  },
+  "title": "List Networks"
+}

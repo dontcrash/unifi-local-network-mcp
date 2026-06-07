@@ -1,0 +1,36 @@
+{
+  "description": "Retrieve general information about the UniFi Network application.",
+  "method": "GET",
+  "name": "unifi_network_get_application_info",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [],
+    "query": []
+  },
+  "path": "/v1/info",
+  "responseSample": "{\n  \"applicationVersion\": \"string\"\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "applicationVersion",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getinfo.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getinfo"
+  },
+  "title": "Get Application Info"
+}

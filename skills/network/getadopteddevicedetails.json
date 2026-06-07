@@ -1,0 +1,511 @@
+{
+  "description": "Retrieve detailed information about a specific adopted device, including firmware versioning, uplink state, details about device features and interfaces (ports, radios) and other key attributes.",
+  "method": "GET",
+  "name": "unifi_network_get_adopted_device_details",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "deviceId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/devices/{deviceId}",
+  "responseSample": "{\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"macAddress\": \"string\",\n  \"ipAddress\": \"string\",\n  \"name\": \"string\",\n  \"model\": \"string\",\n  \"supported\": true,\n  \"state\": \"ONLINE\",\n  \"firmwareVersion\": \"string\",\n  \"firmwareUpdatable\": true,\n  \"adoptedAt\": \"2024-01-01T00:00:00Z\",\n  \"provisionedAt\": \"2024-01-01T00:00:00Z\",\n  \"configurationId\": \"string\",\n  \"uplink\": {\n    \"deviceId\": \"00000000-0000-0000-0000-000000000000\"\n  },\n  \"features\": {\n    \"switching\": {\n      \"lags\": [\n        {\n          \"id\": \"00000000-0000-0000-0000-000000000000\",\n          \"portIdxs\": [\n            0\n          ],\n          \"metadata\": {\n            \"origin\": \"string\"\n          }\n        }\n      ]\n    },\n    \"accessPoint\": null\n  },\n  \"interfaces\": {\n    \"ports\": [\n      {\n        \"idx\": 0,\n        \"state\": \"UP\",\n        \"connector\": \"RJ45\",\n        \"maxSpeedMbps\": 0,\n        \"speedMbps\": 0,\n        \"poe\": {\n          \"standard\": \"802.3af\",\n          \"type\": 0,\n          \"enabled\": true,\n          \"state\": \"UP\"\n        }\n      }\n    ],\n    \"radios\": [\n      {\n        \"wlanStandard\": \"802.11a\",\n        \"frequencyGHz\": 0,\n        \"channelWidthMHz\": 0,\n        \"channel\": 0\n      }\n    ]\n  }\n}",
+  "responses": [
+    {
+      "fields": [
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "id",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "macAddress",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "ipAddress",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "model",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "supported",
+          "required": true,
+          "type": "boolean"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "state",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "firmwareVersion",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "firmwareUpdatable",
+          "required": true,
+          "type": "boolean"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "adoptedAt",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "provisionedAt",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "children": [],
+          "description": null,
+          "discriminator": null,
+          "name": "configurationId",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "deviceId",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "description": "Uplink interface is device's connection to the parent device in the network topology",
+          "discriminator": null,
+          "name": "uplink",
+          "required": false,
+          "type": "object"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "description": null,
+                      "discriminator": null,
+                      "name": "id",
+                      "required": true,
+                      "type": "string"
+                    },
+                    {
+                      "children": [],
+                      "description": null,
+                      "discriminator": null,
+                      "name": "portIdxs",
+                      "required": true,
+                      "type": "Array of integer"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "SYSTEM_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "DERIVED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "ORCHESTRATED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        },
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "SYSTEM_DEFINED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        },
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "DERIVED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        },
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "SYSTEM_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "ORCHESTRATED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        },
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "ORCHESTRATED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        },
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "DERIVED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "ORCHESTRATED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        },
+                        {
+                          "children": [],
+                          "description": null,
+                          "discriminator": [
+                            {
+                              "schema": null,
+                              "selected": true,
+                              "value": "USER_DEFINED"
+                            },
+                            {
+                              "schema": null,
+                              "selected": false,
+                              "value": "DERIVED"
+                            }
+                          ],
+                          "name": "origin",
+                          "required": true,
+                          "type": "string"
+                        }
+                      ],
+                      "description": null,
+                      "discriminator": null,
+                      "name": "metadata",
+                      "required": true,
+                      "type": "object (User defined entity metadata)"
+                    }
+                  ],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "lags",
+                  "required": true,
+                  "type": "Array of object (IntegrationLocalLagLocalDto)"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "switching",
+              "required": false,
+              "type": "object"
+            },
+            {
+              "children": [],
+              "description": null,
+              "discriminator": null,
+              "name": "accessPoint",
+              "required": false,
+              "type": "any"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "features",
+          "required": true,
+          "type": "object"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "idx",
+                  "required": true,
+                  "type": "integer"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "state",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "connector",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "maxSpeedMbps",
+                  "required": true,
+                  "type": "integer"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "speedMbps",
+                  "required": false,
+                  "type": "integer"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [],
+                      "description": null,
+                      "discriminator": null,
+                      "name": "standard",
+                      "required": true,
+                      "type": "string"
+                    },
+                    {
+                      "children": [],
+                      "description": null,
+                      "discriminator": null,
+                      "name": "type",
+                      "required": true,
+                      "type": "integer"
+                    },
+                    {
+                      "children": [],
+                      "description": "Whether the PoE feature is enabled on the port",
+                      "discriminator": null,
+                      "name": "enabled",
+                      "required": true,
+                      "type": "boolean"
+                    },
+                    {
+                      "children": [],
+                      "description": "Whether the port currently supplies power to the (connected) device.",
+                      "discriminator": null,
+                      "name": "state",
+                      "required": true,
+                      "type": "string"
+                    }
+                  ],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "poe",
+                  "required": false,
+                  "type": "object"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "ports",
+              "required": false,
+              "type": "Array of object (Port overview)"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "wlanStandard",
+                  "required": true,
+                  "type": "string"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "frequencyGHz",
+                  "required": true,
+                  "type": "number"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "channelWidthMHz",
+                  "required": true,
+                  "type": "integer"
+                },
+                {
+                  "children": [],
+                  "description": null,
+                  "discriminator": null,
+                  "name": "channel",
+                  "required": false,
+                  "type": "integer"
+                }
+              ],
+              "description": null,
+              "discriminator": null,
+              "name": "radios",
+              "required": false,
+              "type": "Array of object (Wireless radio overview)"
+            }
+          ],
+          "description": null,
+          "discriminator": null,
+          "name": "interfaces",
+          "required": true,
+          "type": "object"
+        }
+      ],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "getadopteddevicedetails.json",
+    "url": "https://developer.ui.com/network/v10.3.58/getadopteddevicedetails"
+  },
+  "title": "Get Adopted Device Details"
+}

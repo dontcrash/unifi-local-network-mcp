@@ -1,0 +1,44 @@
+{
+  "description": "Delete an existing user defined ACL rule on a site.",
+  "method": "DELETE",
+  "name": "unifi_network_delete_acl_rule",
+  "namespace": "network",
+  "parameters": {
+    "body": [],
+    "path": [
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "aclRuleId",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "children": [],
+        "description": null,
+        "discriminator": null,
+        "name": "siteId",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "query": []
+  },
+  "path": "/v1/sites/{siteId}/acl-rules/{aclRuleId}",
+  "responseSample": null,
+  "responses": [
+    {
+      "fields": [],
+      "statuses": [
+        "200"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "file": "deleteaclrule.json",
+    "url": "https://developer.ui.com/network/v10.3.58/deleteaclrule"
+  },
+  "title": "Delete ACL Rule"
+}
