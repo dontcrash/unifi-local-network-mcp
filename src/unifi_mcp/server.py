@@ -7,6 +7,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.fastmcp.tools import Tool
+from mcp.types import ToolAnnotations
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
@@ -89,28 +90,36 @@ def build_tools(
     return tools
 
 
-def summarize_field(field: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "name": field.get("name"),
-        "required": bool(field.get("required")),
-        "type": field.get("type"),
-    }
-
-
-def summarize_skill(skill: SkillDefinition) -> dict[str, Any]:
-    return {
+def summarize_skill(skill: SkillDefinition, *, detail: str = "names") -> dict[str, Any]:
+    summary: dict[str, Any] = {
         "name": skill.name,
         "title": skill.title,
         "method": skill.method,
-        "description": compact_description(skill.description),
-        "pathParams": [summarize_field(field) for field in skill.path_parameters],
-        "queryParams": [summarize_field(field) for field in skill.query_parameters],
-        "hasBody": bool(skill.request_body),
+        "description": compact_description(skill.description) or skill.title,
     }
+    if detail == "summary":
+        summary.update(
+            {
+                "path": skill.path,
+                "pathParams": [
+                    field["name"] for field in skill.path_parameters if field.get("name")
+                ],
+                "queryParams": [
+                    field["name"] for field in skill.query_parameters if field.get("name")
+                ],
+                "hasBody": bool(skill.request_body),
+            }
+        )
+    return summary
 
 
-def skill_schema(skill: SkillDefinition) -> dict[str, Any]:
-    return {
+def skill_schema(
+    skill: SkillDefinition,
+    *,
+    include_responses: bool = False,
+    include_sample: bool = False,
+) -> dict[str, Any]:
+    schema: dict[str, Any] = {
         "name": skill.name,
         "title": skill.title,
         "method": skill.method,
@@ -122,41 +131,81 @@ def skill_schema(skill: SkillDefinition) -> dict[str, Any]:
             "query": skill.query_parameters,
             "body": skill.request_body,
         },
-        "responses": skill.responses,
-        "responseSample": skill.response_sample,
         "source": {
             "file": skill.source.file,
             "url": skill.source.url,
         },
     }
+    if include_responses:
+        schema["responses"] = skill.responses
+    if include_sample:
+        schema["responseSample"] = skill.response_sample
+    return schema
 
 
-def build_server_instructions(skills: list[SkillDefinition]) -> str:
+def read_only_annotations(*, open_world: bool = False) -> ToolAnnotations:
+    return ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=open_world,
+    )
+
+
+def build_server_instructions(settings: Settings, skills: list[SkillDefinition]) -> str:
+    mode = "read-only GET operations" if settings.read_only else "read and write operations"
+    connector_rule = (
+        "Connector proxy tools are enabled for wildcard proxy calls."
+        if settings.allow_connector_proxy
+        else "Connector proxy tools are disabled because they are broad proxy endpoints."
+    )
     return (
-        "Use these tools to call the configured UniFi Network Integration API. "
-        "Read-only mode exposes only GET tools unless READ_ONLY=false. "
-        "Dispatcher rules: call unifi_network_list_skills once per session to see "
-        "available skills. Before every unifi_network_call_skill, ALWAYS call "
-        "unifi_network_get_skill_schema for that skill unless you already have that exact "
-        "schema in context. "
-        "Most detail calls need IDs; use list/overview skills first, commonly sites before "
-        "site-scoped resources. For firewall questions, inspect firewall policies/zones and "
-        "related networks/devices/clients as needed to map IDs, networks, and zone membership. "
+        f"Use this server to call the configured UniFi Network Integration API. It currently "
+        f"exposes {len(skills)} curated {mode}. {connector_rule} "
+        "Use progressive discovery: first call unifi_network_list_skills to inspect the "
+        "brief catalog, then call unifi_network_get_skill_schema for the exact skill before "
+        "unifi_network_call_skill unless that exact schema is already in context. Request "
+        "responses/examples from the schema tool only when needed. "
+        "Do not invent UniFi IDs. Use list, overview, and site discovery skills before "
+        "detail calls that require IDs. For firewall questions, inspect policies, zones, "
+        "networks, devices, and clients as needed to map IDs and membership. "
+        "Never call write skills unless the user explicitly requested a change and "
+        "READ_ONLY=false; the executor blocks writes while READ_ONLY=true."
     )
 
 
 def build_dispatcher_tools(
     executor: SkillExecutor,
     skills: list[SkillDefinition],
+    settings: Settings,
 ) -> list[Tool]:
     skills_by_name = {skill.name: skill for skill in skills}
 
-    async def list_unifi_network_skills() -> dict[str, Any]:
-        """List available UniFi Network skills loaded by this server."""
-        items = [summarize_skill(skill) for skill in skills]
-        return {"count": len(items), "skills": items}
+    async def list_unifi_network_skills(detail: str = "brief") -> dict[str, Any]:
+        """List available UniFi Network skills as a compact catalog."""
+        if detail not in {"brief", "summary"}:
+            return {
+                "ok": False,
+                "error": {
+                    "code": "invalid_detail",
+                    "message": "detail must be one of: brief, summary",
+                },
+            }
+        summary_detail = "names" if detail == "brief" else "summary"
+        items = [summarize_skill(skill, detail=summary_detail) for skill in skills]
+        return {
+            "ok": True,
+            "count": len(items),
+            "total": len(skills),
+            "detail": detail,
+            "skills": items,
+        }
 
-    async def get_unifi_network_skill_schema(skillName: str) -> dict[str, Any]:
+    async def get_unifi_network_skill_schema(
+        skillName: str,
+        includeResponses: bool = False,
+        includeSample: bool = False,
+    ) -> dict[str, Any]:
         """Get the exact input schema and parameter details for one UniFi Network skill."""
         skill = skills_by_name.get(skillName)
         if skill is None:
@@ -167,7 +216,14 @@ def build_dispatcher_tools(
                     "message": f"Unknown skill: {skillName}",
                 },
             }
-        return {"ok": True, "skill": skill_schema(skill)}
+        return {
+            "ok": True,
+            "skill": skill_schema(
+                skill,
+                include_responses=includeResponses,
+                include_sample=includeSample,
+            ),
+        }
 
     async def call_unifi_network_skill(
         skillName: str,
@@ -199,10 +255,10 @@ def build_dispatcher_tools(
             list_unifi_network_skills,
             name="unifi_network_list_skills",
             description=(
-                "List every available UniFi Network skill with brief descriptions. "
-                "Call this once per session, then use unifi_network_get_skill_schema for "
-                "the selected skill before execution."
+                "List every available UniFi Network skill with a brief description. Use "
+                "detail='summary' only when path/query field names would help choose a skill."
             ),
+            annotations=read_only_annotations(),
             structured_output=True,
             meta=None,
         ),
@@ -211,9 +267,11 @@ def build_dispatcher_tools(
             name="unifi_network_get_skill_schema",
             description=(
                 "Get required pathParams, queryParams, body fields, types, enums, and "
-                "responses for one UniFi Network skill. ALWAYS call this before "
+                "full input details for one UniFi Network skill. Set includeResponses or "
+                "includeSample only when output details are needed. ALWAYS call this before "
                 "unifi_network_call_skill unless that exact skill schema is already in context."
             ),
+            annotations=read_only_annotations(),
             structured_output=True,
             meta=None,
         ),
@@ -224,6 +282,12 @@ def build_dispatcher_tools(
                 "Call a UniFi Network skill by name with pathParams, queryParams, and body. "
                 "Before calling this, ALWAYS call unifi_network_get_skill_schema for the same "
                 "skill unless that exact schema is already in context."
+            ),
+            annotations=ToolAnnotations(
+                readOnlyHint=settings.read_only,
+                destructiveHint=not settings.read_only,
+                idempotentHint=settings.read_only,
+                openWorldHint=True,
             ),
             structured_output=True,
             meta=None,
@@ -249,14 +313,14 @@ def build_mcp_server(
     )
     executor = SkillExecutor(settings=settings, client=unifi_client)
     if settings.mcp_tool_mode == "dispatcher":
-        tools = build_dispatcher_tools(executor, skills)
+        tools = build_dispatcher_tools(executor, skills, settings)
     else:
         tools = build_tools(executor, skills, compact=settings.mcp_compact_tools)
 
     LOGGER.info("Loaded %s UniFi MCP tools", len(tools))
     return FastMCP(
         "UniFi Network",
-        instructions=build_server_instructions(skills),
+        instructions=build_server_instructions(settings, skills),
         tools=tools,
         host=settings.mcp_host,
         port=settings.mcp_port,

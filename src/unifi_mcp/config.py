@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlsplit
 
 TRUE_VALUES = {"1", "true", "t", "yes", "y", "on"}
 FALSE_VALUES = {"0", "false", "f", "no", "n", "off"}
@@ -34,8 +35,8 @@ def parse_int(value: str | None, default: int) -> int:
     if value is None or value == "":
         return default
     parsed = int(value)
-    if parsed <= 0:
-        raise ValueError("Port values must be greater than zero")
+    if parsed <= 0 or parsed > 65535:
+        raise ValueError("Port values must be between 1 and 65535")
     return parsed
 
 
@@ -43,6 +44,24 @@ def parse_csv(value: str | None) -> list[str]:
     if value is None or value.strip() == "":
         return []
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def read_secret(env: Mapping[str, str], name: str) -> str | None:
+    value = env.get(name)
+    file_value = env.get(f"{name}_FILE")
+    has_value = value is not None and value.strip() != ""
+    has_file = file_value is not None and file_value.strip() != ""
+
+    if has_value and has_file:
+        raise ValueError(f"Set either {name} or {name}_FILE, not both")
+    if not has_file:
+        return value.strip() if has_value and value is not None else None
+
+    path = Path(str(file_value)).expanduser()
+    try:
+        return path.read_text(encoding="utf-8").strip()
+    except OSError as exc:
+        raise ValueError(f"{name}_FILE could not be read: {path}") from exc
 
 
 @dataclass(frozen=True)
@@ -77,6 +96,11 @@ class Settings:
     def validate(self) -> None:
         if not self.unifi_base_url:
             raise ValueError("UNIFI_BASE_URL is required")
+        split_base_url = urlsplit(self.unifi_base_url)
+        if split_base_url.scheme not in {"http", "https"} or not split_base_url.netloc:
+            raise ValueError("UNIFI_BASE_URL must be an absolute http(s) URL")
+        if split_base_url.query or split_base_url.fragment:
+            raise ValueError("UNIFI_BASE_URL must not include a query string or fragment")
         if not self.unifi_api_key:
             raise ValueError("UNIFI_API_KEY is required")
         if self.mcp_transport not in {"stdio", "sse", "streamable-http"}:
@@ -103,9 +127,11 @@ class Settings:
 
 def load_settings(env: Mapping[str, str]) -> Settings:
     ca_cert = env.get("UNIFI_CA_CERT")
+    unifi_api_key = read_secret(env, "UNIFI_API_KEY") or ""
+    mcp_auth_token = read_secret(env, "MCP_AUTH_TOKEN")
     settings = Settings(
         unifi_base_url=env.get("UNIFI_BASE_URL", "").strip(),
-        unifi_api_key=env.get("UNIFI_API_KEY", "").strip(),
+        unifi_api_key=unifi_api_key,
         read_only=parse_bool(env.get("READ_ONLY"), True),
         verify_tls=parse_bool(env.get("UNIFI_VERIFY_TLS"), True),
         ca_cert=Path(ca_cert).expanduser() if ca_cert else None,
@@ -117,7 +143,7 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         mcp_host=env.get("MCP_HOST", "127.0.0.1").strip(),
         mcp_port=parse_int(env.get("MCP_PORT"), 8000),
         mcp_path=env.get("MCP_PATH", "/mcp").strip() or "/",
-        mcp_auth_token=env.get("MCP_AUTH_TOKEN") or None,
+        mcp_auth_token=mcp_auth_token or None,
         mcp_cors_allow_origins=parse_csv(env.get("MCP_CORS_ALLOW_ORIGINS")),
         mcp_compact_tools=parse_bool(env.get("MCP_COMPACT_TOOLS"), True),
         mcp_tool_mode=env.get("MCP_TOOL_MODE", "dispatcher").strip(),
