@@ -1,116 +1,84 @@
 # UniFi Network MCP Server
 
-This project exposes the UniFi Network Integration API as Model Context Protocol
-tools. Runtime tools are loaded from JSON manifests in `skills/network`, so adding
-or updating endpoints does not require hardcoding every command in Python.
+Model Context Protocol server for the UniFi Network Integration API.
 
-By default the server is read-only: only `GET` endpoints are exposed, and a second
-executor guard rejects write methods while `READ_ONLY=true`.
+It turns curated UniFi Network endpoints into MCP-callable skills, loaded from
+JSON manifests at runtime. The server is read-only by default: `READ_ONLY=true`
+exposes only `GET` skills and the executor blocks writes as a second guard.
+
+## Highlights
+
+- Manifest-driven endpoint catalog in `skills/network`
+- Read-only default with runtime write protection
+- Compact dispatcher tool surface to keep MCP context small
+- Docker Compose and stdio support
+- Self-signed UniFi certificate support
+- Connector wildcard proxy endpoints hidden and blocked
 
 ## Quick Start
 
-Generate or refresh runtime skills from the bundled docs:
+### Docker Compose
 
-```bash
-python3 scripts/import_unifi_docs.py --source docs/network --output skills/network
-```
-
-Run locally:
-
-```bash
-python3 -m venv .venv
-. .venv/bin/activate
-pip install -e '.[dev]'
-UNIFI_BASE_URL='https://172.16.1.1/proxy/network/integration' \
-UNIFI_API_KEY='<api-key>' \
-python -m unifi_mcp
-```
-
-The default Streamable HTTP endpoint is:
-
-```text
-http://127.0.0.1:8000/mcp
-```
-
-For stdio MCP clients:
-
-```bash
-MCP_TRANSPORT=stdio UNIFI_BASE_URL='https://172.16.1.1/proxy/network/integration' \
-UNIFI_API_KEY='<api-key>' python -m unifi_mcp
-```
-
-## Configuration
-
-Required:
-
-- `UNIFI_BASE_URL`: UniFi Network Integration API base URL, normally
-  `https://<console>/proxy/network/integration`. If the value already ends in
-  `/v1`, the server avoids adding a second `/v1`.
-- `UNIFI_API_KEY`: UniFi API key. Do not commit this value.
-- `UNIFI_API_KEY_FILE`: optional alternative to `UNIFI_API_KEY`; read the API key
-  from a mounted secret file such as `/run/secrets/unifi_api_key`.
-
-Common optional settings:
-
-- `READ_ONLY=true`: default. Exposes only `GET` tools and blocks write execution.
-- `READ_ONLY=false`: exposes POST, PUT, PATCH, and DELETE tools.
-- `UNIFI_CA_CERT=/path/to/ca.pem`: trust a self-signed UniFi certificate.
-- `UNIFI_INSECURE_SKIP_VERIFY=false`: dev-only equivalent of `curl -k`.
-- `MCP_TRANSPORT=streamable-http`: also supports `stdio`.
-
-Advanced optional settings:
-
-- `UNIFI_REQUEST_TIMEOUT=30`: UniFi request timeout in seconds.
-- `MCP_HOST=127.0.0.1`, `MCP_PORT=8000`, `MCP_PATH=/mcp`.
-- `MCP_AUTH_TOKEN`: optional Bearer token for Streamable HTTP. For shared or
-  internet-facing deployments, prefer a real MCP-aware auth gateway or proxy.
-- `MCP_AUTH_TOKEN_FILE`: optional alternative to `MCP_AUTH_TOKEN`; read the
-  bearer token from a mounted secret file.
-- `MCP_CORS_ALLOW_ORIGINS`: comma-separated allowed browser origins for
-  Streamable HTTP.
-
-Do not set both a direct secret env var and its `_FILE` variant. The server
-rejects ambiguous secret configuration at startup.
-
-## Docker Compose
+Edit `docker-compose.yml` with your UniFi console URL and API key, then run:
 
 ```bash
 ./build.sh
 ```
 
-`build.sh` is a local convenience wrapper around Docker Compose. For production,
-prefer your deployment system or CI/CD pipeline to build, scan, tag, and publish
-the image, then inject runtime configuration through environment variables or
-secret files.
-
-The compose file binds the MCP endpoint to localhost:
+The MCP endpoint is:
 
 ```text
 http://127.0.0.1:8000/mcp
 ```
 
-The Docker image sets the server's container-internal bind address to
-`0.0.0.0` because Docker forwards the published host port to the container
-network address, not to the container's own `127.0.0.1` loopback listener.
-Compose still publishes the host side only to the host loopback address.
-Using plain `8000:8000` would expose the MCP server on every host network
-interface. Keep `127.0.0.1:8000:8000` for local development unless you also add
-real authentication and intend remote access.
-
-For production Docker deployments, prefer mounted secrets:
+The Compose file publishes only to host loopback:
 
 ```yaml
-environment:
-  UNIFI_API_KEY_FILE: /run/secrets/unifi_api_key
-  MCP_AUTH_TOKEN_FILE: /run/secrets/mcp_auth_token
-secrets:
-  - unifi_api_key
-  - mcp_auth_token
+ports:
+  - "127.0.0.1:8000:8000"
 ```
 
-## Tool Inputs
+Do not change this to `8000:8000` unless you intend to expose the server on all
+host interfaces and have added real authentication. The Docker image binds to
+`0.0.0.0` inside the container so Docker can forward the published port to the
+Python process.
 
-Each MCP tool uses this shape:
+### Local Python
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -e '.[dev]'
+
+UNIFI_BASE_URL='https://172.16.1.1/proxy/network/integration' \
+UNIFI_API_KEY='<api-key>' \
+python -m unifi_mcp
+```
+
+For stdio clients:
+
+```bash
+MCP_TRANSPORT=stdio \
+UNIFI_BASE_URL='https://172.16.1.1/proxy/network/integration' \
+UNIFI_API_KEY='<api-key>' \
+python -m unifi_mcp
+```
+
+## MCP Tools
+
+The server intentionally exposes three MCP tools instead of one tool per UniFi
+endpoint:
+
+| Tool | Purpose |
+| --- | --- |
+| `unifi_network_list_skills` | List available UniFi skills with brief descriptions. Omit arguments for the default brief catalog; use `detail=summary` only when path/query names help choose a skill. |
+| `unifi_network_get_skill_schema` | Fetch the exact input schema for one selected skill. Response docs and samples are opt-in. |
+| `unifi_network_call_skill` | Execute the selected skill with `pathParams`, `queryParams`, and optional `body`. |
+
+This keeps the MCP tool list small while still giving the model exact schemas
+before it calls an endpoint.
+
+Skill calls use this shape:
 
 ```json
 {
@@ -120,9 +88,50 @@ Each MCP tool uses this shape:
 }
 ```
 
-`body` is only accepted for write operations. Tool schemas are generated from the
-source docs and preserve path parameters, query parameters, request body fields,
-response fields, descriptions, required flags, types, and discriminators.
+`body` is only accepted for write operations.
+
+## Configuration
+
+Most local deployments need only the first three values.
+
+| Variable | Default | Notes |
+| --- | --- | --- |
+| `UNIFI_BASE_URL` | required | UniFi Network Integration API base URL, normally `https://<console>/proxy/network/integration`. If it already ends in `/v1`, the client avoids adding another `/v1`. |
+| `UNIFI_API_KEY` | required | UniFi API key. Do not commit real keys. |
+| `READ_ONLY` | `true` | Exposes only `GET` skills and blocks writes. Set `false` to expose curated write endpoints. |
+| `UNIFI_API_KEY_FILE` | unset | Read the API key from a mounted secret file instead of `UNIFI_API_KEY`. |
+| `UNIFI_CA_CERT` | unset | Trust a self-signed UniFi certificate. Prefer this over disabling TLS verification. |
+| `UNIFI_INSECURE_SKIP_VERIFY` | `false` | Development-only equivalent of `curl -k`. |
+| `UNIFI_REQUEST_TIMEOUT` | `30` | UniFi request timeout in seconds. |
+| `MCP_TRANSPORT` | `streamable-http` | Use `stdio` for stdio MCP clients. |
+| `MCP_HOST` | `127.0.0.1` | HTTP bind host. The Docker image overrides this to `0.0.0.0` inside the container. |
+| `MCP_PORT` | `8000` | HTTP bind port. |
+| `MCP_PATH` | `/mcp` | Streamable HTTP endpoint path. |
+| `MCP_AUTH_TOKEN` | unset | Optional bearer token for Streamable HTTP. For shared or internet-facing deployments, prefer a proper authenticated HTTPS proxy or gateway. |
+| `MCP_AUTH_TOKEN_FILE` | unset | Read the bearer token from a mounted secret file instead of `MCP_AUTH_TOKEN`. |
+| `MCP_CORS_ALLOW_ORIGINS` | unset | Comma-separated browser origins allowed to call the Streamable HTTP endpoint. The local compose file currently allows `https://chat.vlan.au`. |
+
+Do not set both a direct secret env var and its `_FILE` variant. Startup fails on
+ambiguous secret configuration.
+
+## Skills
+
+Runtime manifests live in `skills/network` and are generated from `docs/network`:
+
+```bash
+python3 scripts/import_unifi_docs.py --source docs/network --output skills/network
+```
+
+The importer writes endpoint manifests only. Guide documents such as
+`_index.json`, `gettingstarted.json`, `filtering.json`, `error-handling.json`,
+and `quick_start.ansible.json` are ignored.
+
+Generated manifests preserve endpoint paths, parameters, request bodies,
+responses, descriptions, required flags, types, and discriminators.
+
+Connector wildcard proxy endpoints are generated from upstream docs but are not
+exposed at runtime. Add curated endpoint manifests instead of enabling broad
+proxy access.
 
 ## Development
 
@@ -133,19 +142,3 @@ pip install -e '.[dev]'
 pytest
 ruff check .
 ```
-
-The default dispatcher mode keeps MCP context small:
-
-- `unifi_network_list_skills`: list every available skill with a brief
-  description; `detail=summary` also includes path and parameter names.
-- `unifi_network_get_skill_schema`: fetch full input details for one selected
-  endpoint; response docs and samples are opt-in.
-- `unifi_network_call_skill`: execute the selected endpoint.
-
-The importer intentionally ignores guide files without endpoint methods, including
-`_index.json`, `gettingstarted.json`, `filtering.json`, `error-handling.json`, and
-`quick_start.ansible.json`.
-
-Connector wildcard proxy endpoints are generated from the upstream docs but are
-not exposed at runtime. Add curated endpoint manifests instead of enabling broad
-proxy access.
