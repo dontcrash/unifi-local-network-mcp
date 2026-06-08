@@ -114,7 +114,7 @@ secure default and is shown in Compose as an explicit safety setting.
 | `MCP_PATH` | `/mcp` | Streamable HTTP endpoint path. |
 | `MCP_AUTH_TOKEN` | unset | Optional bearer token for Streamable HTTP. For shared or internet-facing deployments, prefer a proper authenticated HTTPS proxy or gateway. |
 | `MCP_AUTH_TOKEN_FILE` | unset | Read the bearer token from a mounted secret file instead of `MCP_AUTH_TOKEN`. |
-| `MCP_CORS_ALLOW_ORIGINS` | unset | Comma-separated exact browser origins allowed to call the Streamable HTTP endpoint. The local compose file currently allows `https://chat.vlan.au`. |
+| `MCP_CORS_ALLOW_ORIGINS` | unset | Comma-separated exact browser origins allowed to call the Streamable HTTP endpoint. |
 
 Do not set both a direct secret env var and its `_FILE` variant. Startup fails on
 ambiguous secret configuration.
