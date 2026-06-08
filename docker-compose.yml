@@ -4,20 +4,10 @@ services:
     build: .
     environment:
       UNIFI_BASE_URL: "https://192.168.1.1/proxy/network/integration"
-      UNIFI_API_KEY: "your-api-key"
+      UNIFI_API_KEY: "network-integration-api-key"
       READ_ONLY: "true"
-      ALLOW_CONNECTOR_PROXY: "false"
-      UNIFI_VERIFY_TLS: "false"
       UNIFI_INSECURE_SKIP_VERIFY: "true"
-      UNIFI_REQUEST_TIMEOUT: "30"
-      MCP_TRANSPORT: "streamable-http"
-      MCP_HOST: "0.0.0.0"
-      MCP_PORT: "8000"
-      MCP_PATH: "/"
-      MCP_ALLOW_UNAUTHENTICATED_REMOTE: "true"
-      MCP_CORS_ALLOW_ORIGINS: "*"
-      MCP_COMPACT_TOOLS: "true"
-      MCP_TOOL_MODE: "dispatcher"
+      MCP_CORS_ALLOW_ORIGINS: "https://domain.com"
     ports:
       - "127.0.0.1:8000:8000"
     restart: unless-stopped
