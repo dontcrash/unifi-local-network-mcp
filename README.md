@@ -45,6 +45,8 @@ Python process.
 
 ### Local Python
 
+Requires Python 3.12 or newer.
+
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
@@ -88,20 +90,23 @@ Skill calls use this shape:
 }
 ```
 
-`body` is only accepted for write operations.
+`body` is accepted only when the selected skill schema includes a request body.
+With the default `READ_ONLY=true`, exposed skills are GET-only and do not need a
+body.
 
 ## Configuration
 
-Most local deployments need only the first three values.
+Only `UNIFI_BASE_URL` and `UNIFI_API_KEY` are required. `READ_ONLY=true` is the
+secure default and is shown in Compose as an explicit safety setting.
 
 | Variable | Default | Notes |
 | --- | --- | --- |
 | `UNIFI_BASE_URL` | required | UniFi Network Integration API base URL, normally `https://<console>/proxy/network/integration`. If it already ends in `/v1`, the client avoids adding another `/v1`. |
 | `UNIFI_API_KEY` | required | UniFi API key. Do not commit real keys. |
-| `READ_ONLY` | `true` | Exposes only `GET` skills and blocks writes. Set `false` to expose curated write endpoints. |
+| `READ_ONLY` | `true` | When true, exposes only `GET` skills and blocks writes. Set `false` to expose curated write endpoints; connector proxy endpoints remain hidden and blocked. |
 | `UNIFI_API_KEY_FILE` | unset | Read the API key from a mounted secret file instead of `UNIFI_API_KEY`. |
 | `UNIFI_CA_CERT` | unset | Trust a self-signed UniFi certificate. Prefer this over disabling TLS verification. |
-| `UNIFI_INSECURE_SKIP_VERIFY` | `false` | Development-only equivalent of `curl -k`. |
+| `UNIFI_INSECURE_SKIP_VERIFY` | `false` | TLS verification stays enabled by default. Set `true` only for dev or self-signed testing; `true` is equivalent to `curl -k`. |
 | `UNIFI_REQUEST_TIMEOUT` | `30` | UniFi request timeout in seconds. |
 | `MCP_TRANSPORT` | `streamable-http` | Use `stdio` for stdio MCP clients. |
 | `MCP_HOST` | `127.0.0.1` | HTTP bind host. The Docker image overrides this to `0.0.0.0` inside the container. |
@@ -109,7 +114,7 @@ Most local deployments need only the first three values.
 | `MCP_PATH` | `/mcp` | Streamable HTTP endpoint path. |
 | `MCP_AUTH_TOKEN` | unset | Optional bearer token for Streamable HTTP. For shared or internet-facing deployments, prefer a proper authenticated HTTPS proxy or gateway. |
 | `MCP_AUTH_TOKEN_FILE` | unset | Read the bearer token from a mounted secret file instead of `MCP_AUTH_TOKEN`. |
-| `MCP_CORS_ALLOW_ORIGINS` | unset | Comma-separated browser origins allowed to call the Streamable HTTP endpoint. The local compose file currently allows `https://chat.vlan.au`. |
+| `MCP_CORS_ALLOW_ORIGINS` | unset | Comma-separated exact browser origins allowed to call the Streamable HTTP endpoint. The local compose file currently allows `https://chat.vlan.au`. |
 
 Do not set both a direct secret env var and its `_FILE` variant. Startup fails on
 ambiguous secret configuration.
