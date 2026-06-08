@@ -153,19 +153,3 @@ def compact_description(description: str, *, max_length: int = 180) -> str:
         return compacted
     return compacted[: max_length - 1].rstrip() + "."
 
-
-def build_tool_description(skill: SkillDefinition, *, compact: bool = False) -> str:
-    if compact:
-        return compact_description(skill.description) or skill.title
-
-    parts = [
-        skill.description.strip(),
-        "",
-        f"Method: {skill.method}",
-        f"Path: {skill.path}",
-    ]
-    if skill.source.url:
-        parts.append(f"Source: {skill.source.url}")
-    if skill.is_write:
-        parts.append("Write operation: hidden and blocked while READ_ONLY=true.")
-    return "\n".join(part for part in parts if part is not None)

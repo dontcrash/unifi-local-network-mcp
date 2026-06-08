@@ -50,34 +50,24 @@ Required:
 - `UNIFI_API_KEY_FILE`: optional alternative to `UNIFI_API_KEY`; read the API key
   from a mounted secret file such as `/run/secrets/unifi_api_key`.
 
-Security and runtime:
+Common optional settings:
 
 - `READ_ONLY=true`: default. Exposes only `GET` tools and blocks write execution.
 - `READ_ONLY=false`: exposes POST, PUT, PATCH, and DELETE tools.
-- `ALLOW_CONNECTOR_PROXY=false`: default. Connector wildcard proxy endpoints are
-  disabled because they are less constrained than curated endpoint manifests.
-- `UNIFI_VERIFY_TLS=true`: default TLS verification.
 - `UNIFI_CA_CERT=/path/to/ca.pem`: trust a self-signed UniFi certificate.
 - `UNIFI_INSECURE_SKIP_VERIFY=false`: dev-only equivalent of `curl -k`.
-- `MCP_TRANSPORT=streamable-http`: also supports `stdio` and `sse`.
-- `MCP_HOST=127.0.0.1`, `MCP_PORT=8000`.
-- `MCP_PATH=/mcp`: Streamable HTTP endpoint path. The bundled dev
-  `docker-compose.yml` sets this to `/` so browser clients can use
-  `http://127.0.0.1:8000` directly.
-- `MCP_AUTH_TOKEN`: optional Bearer token for Streamable HTTP.
+- `MCP_TRANSPORT=streamable-http`: also supports `stdio`.
+
+Advanced optional settings:
+
+- `UNIFI_REQUEST_TIMEOUT=30`: UniFi request timeout in seconds.
+- `MCP_HOST=127.0.0.1`, `MCP_PORT=8000`, `MCP_PATH=/mcp`.
+- `MCP_AUTH_TOKEN`: optional Bearer token for Streamable HTTP. For shared or
+  internet-facing deployments, prefer a real MCP-aware auth gateway or proxy.
 - `MCP_AUTH_TOKEN_FILE`: optional alternative to `MCP_AUTH_TOKEN`; read the
   bearer token from a mounted secret file.
 - `MCP_CORS_ALLOW_ORIGINS`: comma-separated allowed browser origins for
-  Streamable HTTP, for example `http://localhost:8080,http://127.0.0.1:8080`.
-  The bundled dev `docker-compose.yml` uses `*` for browser clients such as
-  llama.cpp.
-- `MCP_COMPACT_TOOLS=true`: default. Advertises compact tool descriptions and
-  schemas to reduce MCP context size while keeping full skill manifests on disk.
-- `MCP_TOOL_MODE=dispatcher`: default. Exposes a small dispatcher tool surface:
-  list the brief skill catalog, inspect one schema, then call one skill by name.
-  Set `individual` to advertise every endpoint as its own MCP tool.
-- `MCP_ALLOW_UNAUTHENTICATED_REMOTE=false`: required to bind HTTP to a non-local
-  host without `MCP_AUTH_TOKEN`.
+  Streamable HTTP.
 
 Do not set both a direct secret env var and its `_FILE` variant. The server
 rejects ambiguous secret configuration at startup.
@@ -96,11 +86,16 @@ secret files.
 The compose file binds the MCP endpoint to localhost:
 
 ```text
-http://127.0.0.1:8000
+http://127.0.0.1:8000/mcp
 ```
 
-Inside the container the server binds to `0.0.0.0` so Docker can publish the
-port, but compose publishes it only to the host loopback address.
+The Docker image sets the server's container-internal bind address to
+`0.0.0.0` because Docker forwards the published host port to the container
+network address, not to the container's own `127.0.0.1` loopback listener.
+Compose still publishes the host side only to the host loopback address.
+Using plain `8000:8000` would expose the MCP server on every host network
+interface. Keep `127.0.0.1:8000:8000` for local development unless you also add
+real authentication and intend remote access.
 
 For production Docker deployments, prefer mounted secrets:
 
@@ -150,3 +145,7 @@ The default dispatcher mode keeps MCP context small:
 The importer intentionally ignores guide files without endpoint methods, including
 `_index.json`, `gettingstarted.json`, `filtering.json`, `error-handling.json`, and
 `quick_start.ansible.json`.
+
+Connector wildcard proxy endpoints are generated from the upstream docs but are
+not exposed at runtime. Add curated endpoint manifests instead of enabling broad
+proxy access.

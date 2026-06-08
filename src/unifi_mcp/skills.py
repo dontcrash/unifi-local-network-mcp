@@ -95,18 +95,16 @@ def should_expose_skill(
     skill: SkillDefinition,
     *,
     read_only: bool,
-    allow_connector_proxy: bool,
 ) -> bool:
-    if read_only and not skill.is_read:
+    if skill.is_connector_proxy:
         return False
-    return not (skill.is_connector_proxy and not allow_connector_proxy)
+    return not (read_only and not skill.is_read)
 
 
 def load_skills(
     skills_dir: Path,
     *,
     read_only: bool = True,
-    allow_connector_proxy: bool = False,
 ) -> list[SkillDefinition]:
     if not skills_dir.exists():
         raise SkillLoadError(f"Skills directory does not exist: {skills_dir}")
@@ -118,7 +116,6 @@ def load_skills(
         if should_expose_skill(
             skill,
             read_only=read_only,
-            allow_connector_proxy=allow_connector_proxy,
         )
     ]
 

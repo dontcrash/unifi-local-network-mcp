@@ -21,19 +21,11 @@ def test_load_settings_supports_root_mcp_path() -> None:
     assert settings.mcp_path == "/"
 
 
-def test_load_settings_defaults_to_compact_tools() -> None:
+def test_load_settings_defaults_to_streamable_http() -> None:
     settings = load_settings(base_env())
 
-    assert settings.mcp_compact_tools is True
-    assert settings.mcp_tool_mode == "dispatcher"
-
-
-def test_load_settings_rejects_unknown_tool_mode() -> None:
-    env = base_env()
-    env["MCP_TOOL_MODE"] = "unknown"
-
-    with pytest.raises(ValueError, match="MCP_TOOL_MODE"):
-        load_settings(env)
+    assert settings.mcp_transport == "streamable-http"
+    assert settings.mcp_path == "/mcp"
 
 
 def test_load_settings_rejects_relative_mcp_path() -> None:

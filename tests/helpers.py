@@ -14,7 +14,7 @@ SKILLS = ROOT / "skills/network"
 
 
 def all_runtime_skills() -> list[SkillDefinition]:
-    return load_skills(SKILLS, read_only=False, allow_connector_proxy=True)
+    return load_skills(SKILLS, read_only=False)
 
 
 def find_skill(predicate: Callable[[SkillDefinition], bool]) -> SkillDefinition:

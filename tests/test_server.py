@@ -15,41 +15,38 @@ class FailingClient:
         raise AssertionError("client should not be called")
 
 
-async def test_mcp_server_lists_only_default_read_tools() -> None:
-    expected = load_skills(SKILLS, read_only=True, allow_connector_proxy=False)
+async def test_mcp_server_list_catalog_includes_only_default_read_tools() -> None:
+    expected = load_skills(SKILLS, read_only=True)
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
         skills_dir=SKILLS,
-        mcp_tool_mode="individual",
     )
     mcp = build_mcp_server(settings, client=FailingClient())  # type: ignore[arg-type]
 
-    tools = await mcp.list_tools()
-    tool_names = {tool.name for tool in tools}
+    _, result = await mcp.call_tool("unifi_network_list_skills", {})
+    tool_names = {item["name"] for item in result["skills"]}
 
     assert tool_names == {skill.name for skill in expected}
-    assert not any(tool.model_dump(by_alias=True).get("_meta") for tool in tools)
-    assert "pathParams" in tools[0].inputSchema["properties"]
+    assert all(skill.method == "GET" for skill in expected)
 
 
-async def test_mcp_server_lists_write_tools_when_enabled() -> None:
-    expected = load_skills(SKILLS, read_only=False, allow_connector_proxy=True)
+async def test_mcp_server_list_catalog_includes_write_tools_when_enabled() -> None:
+    expected = load_skills(SKILLS, read_only=False)
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
         skills_dir=SKILLS,
         read_only=False,
-        allow_connector_proxy=True,
-        mcp_tool_mode="individual",
     )
     mcp = build_mcp_server(settings, client=FailingClient())  # type: ignore[arg-type]
 
-    tool_names = {tool.name for tool in await mcp.list_tools()}
+    _, result = await mcp.call_tool("unifi_network_list_skills", {})
+    tool_names = {item["name"] for item in result["skills"]}
 
     assert tool_names == {skill.name for skill in expected}
     assert any(skill.method != "GET" for skill in expected)
-    assert any(skill.is_connector_proxy for skill in expected)
+    assert all(not skill.is_connector_proxy for skill in expected)
 
 
 async def test_mcp_server_uses_configured_streamable_http_path() -> None:
@@ -82,7 +79,7 @@ async def test_mcp_server_defaults_to_dispatcher_tools() -> None:
 
 
 async def test_server_instructions_use_progressive_discovery_without_skill_catalog() -> None:
-    expected = load_skills(SKILLS, read_only=True, allow_connector_proxy=False)
+    expected = load_skills(SKILLS, read_only=True)
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
@@ -96,12 +93,11 @@ async def test_server_instructions_use_progressive_discovery_without_skill_catal
     assert "call unifi_network_get_skill_schema" in mcp.instructions
     assert "unless that exact schema is already in context" in mcp.instructions
     assert "Do not invent UniFi IDs" in mcp.instructions
-    assert "policies, zones" in mcp.instructions
     assert not any(skill.name in mcp.instructions for skill in expected)
 
 
 async def test_dispatcher_list_tool_returns_brief_catalog_by_default() -> None:
-    expected = load_skills(SKILLS, read_only=True, allow_connector_proxy=False)
+    expected = load_skills(SKILLS, read_only=True)
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
@@ -122,7 +118,7 @@ async def test_dispatcher_list_tool_returns_brief_catalog_by_default() -> None:
 
 
 async def test_dispatcher_list_tool_can_include_parameter_names() -> None:
-    expected = load_skills(SKILLS, read_only=True, allow_connector_proxy=False)
+    expected = load_skills(SKILLS, read_only=True)
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
@@ -142,8 +138,29 @@ async def test_dispatcher_list_tool_can_include_parameter_names() -> None:
     assert all("queryParams" in item for item in result["skills"])
 
 
+async def test_dispatcher_list_tool_falls_back_to_brief_for_unknown_detail() -> None:
+    expected = load_skills(SKILLS, read_only=True)
+    settings = Settings(
+        unifi_base_url="https://unifi.local/proxy/network/integration",
+        unifi_api_key="secret",
+        skills_dir=SKILLS,
+    )
+    mcp = build_mcp_server(settings, client=FailingClient())  # type: ignore[arg-type]
+
+    _, result = await mcp.call_tool(
+        "unifi_network_list_skills",
+        {"detail": "short"},
+    )
+
+    assert result["ok"] is True
+    assert result["detail"] == "brief"
+    assert result["warning"]
+    assert result["count"] == len(expected)
+    assert all("pathParams" not in item for item in result["skills"])
+
+
 async def test_dispatcher_schema_tool_returns_full_skill_schema() -> None:
-    expected = load_skills(SKILLS, read_only=True, allow_connector_proxy=False)[0]
+    expected = load_skills(SKILLS, read_only=True)[0]
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
@@ -165,7 +182,7 @@ async def test_dispatcher_schema_tool_returns_full_skill_schema() -> None:
 
 
 async def test_dispatcher_schema_tool_can_include_responses_and_sample() -> None:
-    expected = load_skills(SKILLS, read_only=True, allow_connector_proxy=False)[0]
+    expected = load_skills(SKILLS, read_only=True)[0]
     settings = Settings(
         unifi_base_url="https://unifi.local/proxy/network/integration",
         unifi_api_key="secret",
@@ -201,24 +218,6 @@ async def test_dispatcher_tools_have_risk_annotations() -> None:
     assert tools["unifi_network_get_skill_schema"].annotations.readOnlyHint is True
     assert tools["unifi_network_call_skill"].annotations.readOnlyHint is True
     assert tools["unifi_network_call_skill"].annotations.destructiveHint is False
-
-
-async def test_mcp_server_advertises_compact_tools_by_default() -> None:
-    settings = Settings(
-        unifi_base_url="https://unifi.local/proxy/network/integration",
-        unifi_api_key="secret",
-        skills_dir=SKILLS,
-        mcp_tool_mode="individual",
-    )
-    mcp = build_mcp_server(settings, client=FailingClient())  # type: ignore[arg-type]
-
-    tools = await mcp.list_tools()
-    serialized = [tool.model_dump(by_alias=True) for tool in tools]
-
-    assert not any("_meta" in tool and tool["_meta"] for tool in serialized)
-    assert not any("Source:" in (tool.get("description") or "") for tool in serialized)
-    assert not any("Path:" in (tool.get("description") or "") for tool in serialized)
-    assert not any("x-unifi-type" in str(tool.get("inputSchema")) for tool in serialized)
 
 
 async def test_streamable_http_cors_preflight_allows_browser_clients() -> None:

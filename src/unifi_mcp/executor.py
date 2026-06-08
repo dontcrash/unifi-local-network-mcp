@@ -26,10 +26,10 @@ class SkillExecutor:
                 "read_only_violation",
                 f"{skill.name} is a {skill.method} operation and READ_ONLY=true.",
             )
-        if skill.is_connector_proxy and not self.settings.allow_connector_proxy:
+        if skill.is_connector_proxy:
             return error_response(
                 "connector_proxy_disabled",
-                "Connector proxy tools are disabled unless ALLOW_CONNECTOR_PROXY=true.",
+                "Connector proxy tools are not exposed by this server.",
             )
 
         path_params = pathParams or {}
